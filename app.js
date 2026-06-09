@@ -6,7 +6,7 @@ let page = new URLSearchParams(location.search).get("screen") || document.body.d
 const configured = SUPABASE_URL.startsWith("http") && SUPABASE_ANON_KEY.length > 30;
 const client = configured ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 const sessionKey = "bolao_participant";
-const bettingCutoffMs = 60 * 60 * 1000;
+const bettingCutoffMs = 2 * 60 * 60 * 1000;
 let draftPredictions = new Map();
 let currentParticipant = null;
 let currentMatches = [];
@@ -113,6 +113,8 @@ function mountAppShell() {
         <section class="panel small-copy">
           <h2>Regra</h2>
           <p>Acertou o vencedor ou empate, ganha 1 ponto. Errou, 0 ponto.</p>
+          <p>Para concorrer ao prêmio, faça o PIX para o CPF 512.675.228-60 - Rebeca.</p>
+          <button id="open-rules" class="link-button block-action" type="button">Ver regras completas</button>
         </section>
         <section class="panel">
           <h2>Meu histórico</h2>
@@ -602,6 +604,41 @@ function initSavePredictions() {
     rankingButton.dataset.ready = "true";
     rankingButton.addEventListener("click", showFullRanking);
   }
+
+  const rulesButton = $("#open-rules");
+  if (rulesButton && !rulesButton.dataset.ready) {
+    rulesButton.dataset.ready = "true";
+    rulesButton.addEventListener("click", showRulesModal);
+  }
+}
+
+function showRulesModal() {
+  const modal = document.createElement("div");
+  modal.className = "modal-backdrop";
+  modal.innerHTML = `
+    <section class="modal rules-modal">
+      <div class="section-head tight">
+        <h2>Regras do bolão</h2>
+        <button class="ghost" type="button" data-close-modal>Fechar</button>
+      </div>
+      <div class="rules-list">
+        <p><strong>Participação:</strong> para estar apto a concorrer ao prêmio, o participante precisa fazer o PIX para o CPF 512.675.228-60 - Rebeca.</p>
+        <p><strong>Pontuação:</strong> acertou o resultado do jogo, ganha 1 ponto. Errou, não ganha ponto.</p>
+        <p><strong>Palpites:</strong> cada palpite só pode ser selecionado e salvo uma vez. Depois de salvo, não poderá ser alterado.</p>
+        <p><strong>Prazo:</strong> os palpites ficam abertos até 2 horas antes do início de cada jogo.</p>
+        <p><strong>Integridade:</strong> não é permitido tentar alterar palpites depois do prazo, depois de salvar ou depois do jogo. Quem tentar burlar a brincadeira pode ser removido pelo administrador.</p>
+        <p><strong>Ranking:</strong> o ranking será atualizado no final de cada dia, já considerando os resultados lançados pelo administrador.</p>
+        <p><strong>Empate no ranking:</strong> se houver empate em pontos, o critério de desempate será definido pelo administrador. A princípio, serão considerados os jogos do Brasil.</p>
+        <p><strong>Resultados:</strong> o resultado válido para pontuação é o resultado lançado pelo administrador no sistema.</p>
+        <p><strong>Objetivo:</strong> este é um bolão entre amigos e conhecidos para diversão. As regras servem para deixar tudo claro e evitar confusão.</p>
+      </div>
+    </section>
+  `;
+  document.body.appendChild(modal);
+  modal.querySelector("[data-close-modal]").addEventListener("click", () => modal.remove());
+  modal.addEventListener("click", (event) => {
+    if (event.target === modal) modal.remove();
+  });
 }
 
 function updateSaveButton() {

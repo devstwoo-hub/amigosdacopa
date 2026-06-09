@@ -51,6 +51,16 @@ button, input, select, textarea {
   padding: 24px;
 }
 
+.payment-note {
+  margin: 18px 0 0;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f8faf8;
+  color: var(--ink);
+  font-weight: 700;
+}
+
 .brand {
   display: flex;
   gap: 12px;
@@ -676,6 +686,16 @@ p {
   border-radius: 8px;
   box-shadow: var(--shadow);
   padding: 18px;
+}
+
+.rules-list {
+  display: grid;
+  gap: 10px;
+}
+
+.rules-list p {
+  margin: 0;
+  color: var(--ink);
 }
 
 .full-button {

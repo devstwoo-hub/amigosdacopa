@@ -88,7 +88,7 @@ with check (
       and matches.status = 'scheduled'
       and (
         matches.kickoff_at is null
-        or matches.kickoff_at > now() + interval '1 hour'
+        or matches.kickoff_at > now() + interval '2 hours'
       )
   )
 );
