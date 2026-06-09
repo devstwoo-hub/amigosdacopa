@@ -271,10 +271,34 @@ function pickLabel(match, pick) {
 }
 
 function displayTeam(team) {
-  return teamTranslations[team] || String(team || "")
+  const cleanTeam = fixEncoding(String(team || ""));
+  return teamTranslations[cleanTeam] || cleanTeam
     .replaceAll("1Âº", "1º")
     .replaceAll("2Âº", "2º")
     .replaceAll("3Âº", "3º");
+}
+
+function fixEncoding(value) {
+  return String(value || "")
+    .replaceAll("Ã", "Á")
+    .replaceAll("Ã‰", "É")
+    .replaceAll("Ã", "Í")
+    .replaceAll("Ã“", "Ó")
+    .replaceAll("Ãš", "Ú")
+    .replaceAll("Ã‡", "Ç")
+    .replaceAll("Ã¡", "á")
+    .replaceAll("Ã¢", "â")
+    .replaceAll("Ã£", "ã")
+    .replaceAll("Ã©", "é")
+    .replaceAll("Ãª", "ê")
+    .replaceAll("Ã­", "í")
+    .replaceAll("Ã³", "ó")
+    .replaceAll("Ã´", "ô")
+    .replaceAll("Ãµ", "õ")
+    .replaceAll("Ãº", "ú")
+    .replaceAll("Ã¼", "ü")
+    .replaceAll("Ã§", "ç")
+    .replaceAll("Âº", "º");
 }
 
 function isBrazilMatch(match) {
